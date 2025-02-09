@@ -4,7 +4,7 @@
 
 ### Anggota dari projek kelompok ini :
 
-> #### Yehezkiel Darren Putra Waradoyo.
+> #### Yehezkiel Darren Putra Wardoyo.
 >
 > NIM : 71231023.
 
