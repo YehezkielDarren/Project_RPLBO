@@ -10,6 +10,7 @@ public class ToDoList extends Application {
     public void start(Stage stage) throws Exception {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/project/todolist/login-view.fxml"));
         Scene scene = new Scene(loader.load());
+        stage.setTitle("Aplikasi ToDoList");
         stage.setScene(scene);
         stage.show();
     }
