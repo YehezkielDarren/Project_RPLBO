@@ -1,0 +1,116 @@
+package project.todolist.controller;
+
+import javafx.fxml.FXML;
+import javafx.scene.control.*;
+import javafx.stage.Stage;
+import project.todolist.data.DataStore;
+import project.todolist.model.ToDoItem;
+
+import java.time.LocalDate;
+import javafx.util.StringConverter;
+
+public class TaskFormController {
+    @FXML private DatePicker datePicker;
+    @FXML private Spinner<Integer> hourSpinner;
+    @FXML private Spinner<Integer> minuteSpinner;
+    @FXML private TextArea catatanArea;
+    @FXML private ComboBox<String> kategoriCombo;
+    @FXML private TextField kategoriBaruField;
+
+    private String currentUser;
+    private ToDoItem editingItem;
+    private Runnable onSaveCallback;
+
+    @FXML
+    private void initialize() {
+        // Hour spinner with two-digit format and wrap-around
+        SpinnerValueFactory.IntegerSpinnerValueFactory hourFactory =
+                new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 23, 0);
+        hourFactory.setWrapAround(true);
+        hourFactory.setConverter(new StringConverter<Integer>() {
+            @Override public String toString(Integer value) {
+                return String.format("%02d", (value != null ? value : 0));
+            }
+            @Override public Integer fromString(String string) {
+                try { return Integer.parseInt(string); }
+                catch (NumberFormatException e) { return 0; }
+            }
+        });
+        hourSpinner.setValueFactory(hourFactory);
+        hourSpinner.getEditor().setText(hourFactory.getConverter().toString(hourFactory.getValue()));
+
+        // Minute spinner with two-digit format and wrap-around
+        SpinnerValueFactory.IntegerSpinnerValueFactory minuteFactory =
+                new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 59, 0);
+        minuteFactory.setWrapAround(true);
+        minuteFactory.setConverter(new StringConverter<Integer>() {
+            @Override public String toString(Integer value) {
+                return String.format("%02d", (value != null ? value : 0));
+            }
+            @Override public Integer fromString(String string) {
+                try { return Integer.parseInt(string); }
+                catch (NumberFormatException e) { return 0; }
+            }
+        });
+        minuteSpinner.setValueFactory(minuteFactory);
+        minuteSpinner.getEditor().setText(minuteFactory.getConverter().toString(minuteFactory.getValue()));
+    }
+
+    public void initData(String user, ToDoItem item, Runnable onSave) {
+        this.currentUser = user;
+        this.editingItem = item;
+        this.onSaveCallback = onSave;
+
+        // Load categories into combo box
+        kategoriCombo.getItems().addAll(
+                DataStore.getTodos(user).stream()
+                        .map(ToDoItem::getKategori)
+                        .distinct()
+                        .toList()
+        );
+
+        if (item != null) {
+            datePicker.setValue(LocalDate.parse(item.getTanggal()));
+            String[] waktuParts = item.getWaktu().split(":");
+            hourSpinner.getValueFactory().setValue(Integer.parseInt(waktuParts[0]));
+            minuteSpinner.getValueFactory().setValue(Integer.parseInt(waktuParts[1]));
+            catatanArea.setText(item.getCatatan());
+            kategoriCombo.setValue(item.getKategori());
+        }
+    }
+
+    @FXML
+    private void handleAddCategory() {
+        String newCategory = kategoriBaruField.getText().trim();
+        if (!newCategory.isEmpty() && !kategoriCombo.getItems().contains(newCategory)) {
+            kategoriCombo.getItems().add(newCategory);
+            kategoriCombo.setValue(newCategory);
+        }
+    }
+
+    @FXML
+    private void handleSaveTask() {
+        String tanggal = datePicker.getValue() != null ? datePicker.getValue().toString() : "";
+        String waktu = String.format("%02d:%02d", hourSpinner.getValue(), minuteSpinner.getValue());
+        String catatan = catatanArea.getText().trim();
+        String kategori = kategoriCombo.getValue();
+
+        if (tanggal.isEmpty() || waktu.isEmpty() || catatan.isEmpty() || kategori == null) {
+            Alert alert = new Alert(Alert.AlertType.WARNING, "Semua field harus diisi!");
+            alert.showAndWait();
+            return;
+        }
+
+        ToDoItem newItem = new ToDoItem(tanggal, waktu, catatan, kategori);
+
+        if (editingItem == null) {
+            DataStore.addTodo(currentUser, newItem);
+        } else {
+            DataStore.editTodo(currentUser, editingItem, newItem);
+        }
+
+        if (onSaveCallback != null) onSaveCallback.run();
+
+        ((Stage) datePicker.getScene().getWindow()).close();
+    }
+}
