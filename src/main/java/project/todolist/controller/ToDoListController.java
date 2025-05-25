@@ -13,7 +13,7 @@ import java.io.IOException;
 
 public class ToDoListController {
     @FXML private TableView<ToDoItem> todoTable;
-    @FXML private TableColumn<ToDoItem, String> tanggalCol, waktuCol, catatanCol, kategoriCol;
+    @FXML private TableColumn<ToDoItem, String> tanggalCol, waktuCol, catatanCol, statusCol, kategoriCol;
     @FXML private ComboBox<String> filterCombo;
     private String currentUser;
 
@@ -24,7 +24,10 @@ public class ToDoListController {
     }
 
     private void loadTodos() {
-        todoTable.setItems(FXCollections.observableArrayList(DataStore.getTodos(currentUser)));
+        var todos = DataStore.getTodos(currentUser);
+        todos.forEach(ToDoItem::updateStatus);
+        todoTable.setItems(FXCollections.observableArrayList(todos));
+//        todoTable.setItems(FXCollections.observableArrayList(DataStore.getTodos(currentUser)));
     }
 
     private void loadCategories() {
@@ -127,6 +130,7 @@ public class ToDoListController {
         tanggalCol.setCellValueFactory(data -> data.getValue().tanggalProperty());
         waktuCol.setCellValueFactory(data -> data.getValue().waktuProperty());
         catatanCol.setCellValueFactory(data -> data.getValue().catatanProperty());
+        statusCol.setCellValueFactory(data -> data.getValue().statusProperty());
         kategoriCol.setCellValueFactory(data -> data.getValue().kategoriProperty());
     }
 }

@@ -30,6 +30,7 @@
             <TableColumn fx:id="tanggalCol" prefWidth="118.0" text="Tanggal" />
             <TableColumn fx:id="waktuCol" prefWidth="97.0" text="Waktu" />
             <TableColumn fx:id="catatanCol" prefWidth="274.0" text="Catatan" />
+            <TableColumn fx:id="statusCol" text="Status" prefWidth="100"/>
             <TableColumn fx:id="kategoriCol" prefWidth="164.0" text="Kategori" />
         </columns>
     </TableView>

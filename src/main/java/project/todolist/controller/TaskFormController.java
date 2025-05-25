@@ -114,6 +114,7 @@ public class TaskFormController {
         }
 
         ToDoItem newItem = new ToDoItem(tanggal, waktu, catatan, kategori);
+        newItem.updateStatus();
 
         if (editingItem == null) {
             DataStore.addTodo(currentUser, newItem);
