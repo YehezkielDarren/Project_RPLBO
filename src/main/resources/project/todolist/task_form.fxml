@@ -13,6 +13,10 @@
 
 <VBox spacing="20" styleClass="task-form-root" stylesheets="@css/form.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="project.todolist.controller.TaskFormController">
     <HBox alignment="CENTER_LEFT" spacing="15">
+        <Label minWidth="110" styleClass="form-label" text="Judul:" />
+        <TextField fx:id="titleField" prefWidth="350" promptText="Judul tugas" styleClass="form-textfield" />
+    </HBox>
+    <HBox alignment="CENTER_LEFT" spacing="15">
         <Label minWidth="110" styleClass="form-label" text="Catatan:" />
         <TextArea fx:id="catatanArea" prefColumnCount="25" prefRowCount="4" promptText="Deskripsi tugas" styleClass="form-textarea" />
     </HBox>

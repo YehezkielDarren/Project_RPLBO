@@ -10,6 +10,7 @@ import java.time.LocalDate;
 import javafx.util.StringConverter;
 
 public class TaskFormController {
+    @FXML private TextField titleField;
     @FXML private DatePicker datePicker;
     @FXML private Spinner<Integer> hourSpinner;
     @FXML private Spinner<Integer> minuteSpinner;
@@ -65,6 +66,7 @@ public class TaskFormController {
         );
 
         if (item != null) {
+            titleField.setText(item.getTitle());
             datePicker.setValue(LocalDate.parse(item.getTanggal()));
             String[] waktuParts = item.getWaktu().split(":");
             hourSpinner.getValueFactory().setValue(Integer.parseInt(waktuParts[0]));
@@ -97,18 +99,19 @@ public class TaskFormController {
 
     @FXML
     private void handleSaveTask() {
+        String title = titleField.getText().trim();
         String tanggal = datePicker.getValue() != null ? datePicker.getValue().toString() : "";
         String waktu = String.format("%02d:%02d", hourSpinner.getValue(), minuteSpinner.getValue());
         String catatan = catatanArea.getText().trim();
         String kategori = kategoriCombo.getValue();
 
-        if (tanggal.isEmpty() || waktu.isEmpty() || catatan.isEmpty() || kategori == null) {
+        if (title.isEmpty() || tanggal.isEmpty() || waktu.isEmpty() || catatan.isEmpty() || kategori == null) {
             Alert alert = new Alert(Alert.AlertType.WARNING, "Semua field harus diisi!");
             alert.showAndWait();
             return;
         }
 
-        ToDoItem newItem = new ToDoItem(tanggal, waktu, catatan, kategori);
+        ToDoItem newItem = new ToDoItem(tanggal, waktu, title, catatan, kategori);
         newItem.updateStatus();
 
         if (editingItem == null) {
