@@ -63,9 +63,18 @@ public class ToDoListController {
     private void deleteTodo() {
         ToDoItem selected = todoTable.getSelectionModel().getSelectedItem();
         if (selected != null) {
-            DataStore.removeTodo(currentUser, selected);
-            loadTodos();
-            loadCategories();
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle("Confirmation");
+            alert.setHeaderText("Apakah Ingin Menghapus Tugas Ini?");
+            alert.setContentText("Klik OK untuk melanjutkan");
+            alert.getButtonTypes().setAll(ButtonType.OK, ButtonType.CANCEL);
+            alert.showAndWait().ifPresent(response -> {
+                if (response == ButtonType.OK) {
+                    DataStore.removeTodo(currentUser, selected);
+                    loadTodos();
+                    loadCategories();
+                }
+            });
         }
     }
 
@@ -73,19 +82,28 @@ public class ToDoListController {
     private void editTodo() {
         ToDoItem selected = todoTable.getSelectionModel().getSelectedItem();
         if (selected != null) {
-            try {
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("/project/todolist/task_form.fxml"));
-                Stage stage = new Stage();
-                stage.setScene(new Scene(loader.load()));
-                stage.setTitle("Edit Tugas");
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle("Confirmation");
+            alert.setHeaderText("Apakah Ingin Edit Tugas Ini?");
+            alert.setContentText("Klik OK untuk melanjutkan");
+            alert.getButtonTypes().setAll(ButtonType.OK, ButtonType.CANCEL);
+            alert.showAndWait().ifPresent(response -> {
+                if (response == ButtonType.OK) {
+                    try {
+                        FXMLLoader loader = new FXMLLoader(getClass().getResource("/project/todolist/task_form.fxml"));
+                        Stage stage = new Stage();
+                        stage.setScene(new Scene(loader.load()));
+                        stage.setTitle("Edit Tugas");
 
-                TaskFormController controller = loader.getController();
-                controller.initData(currentUser, selected, this::refreshData);
+                        TaskFormController controller = loader.getController();
+                        controller.initData(currentUser, selected, this::refreshData);
 
-                stage.show();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+                        stage.show();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
         }
     }
 

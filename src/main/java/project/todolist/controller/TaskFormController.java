@@ -118,8 +118,12 @@ public class TaskFormController {
 
         if (editingItem == null) {
             DataStore.addTodo(currentUser, newItem);
+            Alert successAlert = new Alert(Alert.AlertType.INFORMATION, "Tugas berhasil ditambahkan!");
+            successAlert.showAndWait();
         } else {
             DataStore.editTodo(currentUser, editingItem, newItem);
+            Alert successAlert = new Alert(Alert.AlertType.INFORMATION, "Tugas berhasil diperbarui!");
+            successAlert.showAndWait();
         }
 
         if (onSaveCallback != null) onSaveCallback.run();
