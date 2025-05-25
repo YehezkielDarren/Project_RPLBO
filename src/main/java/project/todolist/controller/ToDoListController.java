@@ -16,6 +16,7 @@ import java.io.IOException;
 import java.util.List;
 
 public class ToDoListController {
+    public Button logoutButton;
     @FXML private ListView<ToDoItem> todoListView;
     @FXML private ComboBox<String> filterCombo;
     private String currentUser;
@@ -59,6 +60,11 @@ public class ToDoListController {
                 -fx-padding: 10;
             """);
 
+                    // Create a title label with bold formatting
+                    Label title = new Label(item.getTitle());
+                    title.setStyle("-fx-font-weight: bold; -fx-font-size: 16px;");
+                    title.setWrapText(true);
+
                     Label tanggal = new Label("Tanggal: " + item.getTanggal());
                     Label waktu = new Label("Waktu: " + item.getWaktu());
                     Label catatan = new Label("Catatan: " + item.getCatatan());
@@ -77,7 +83,8 @@ public class ToDoListController {
                         default -> status.setStyle("-fx-text-fill: red;");
                     }
 
-                    card.getChildren().addAll(tanggal, waktu, catatan, status, kategori);
+                    // Add the title as the first element in the card
+                    card.getChildren().addAll(title, tanggal, waktu, catatan, status, kategori);
                     VBox wrapper = new VBox(card);
                     VBox.setMargin(card, new Insets(0, 0, 0, 0));
 
@@ -91,10 +98,17 @@ public class ToDoListController {
     private void loadCategories() {
         filterCombo.getItems().clear();
         filterCombo.getItems().add("Select Kategori");
+
+        // Add special date-based filter options
+        filterCombo.getItems().add("Terlambat");
+        filterCombo.getItems().add("Mendatang");
+
+        // Add existing category-based filters
         DataStore.getTodos(currentUser).stream()
                 .map(ToDoItem::getKategori)
                 .distinct()
                 .forEach(filterCombo.getItems()::add);
+
         filterCombo.getSelectionModel().selectFirst();
     }
 
@@ -172,13 +186,81 @@ public class ToDoListController {
         String filter = filterCombo.getValue();
         if (filter == null || filter.equals("Select Kategori")) {
             loadTodos();
+        } else if (filter.equals("Terlambat") || filter.equals("Mendatang")) {
+            List<ToDoItem> todos = DataStore.getTodos(currentUser);
+            todos.removeIf(todo -> todo == null);
+            todos.forEach(ToDoItem::updateStatus);
+
+            List<ToDoItem> filtered;
+            if (filter.equals("Terlambat")) {
+                filtered = todos.stream()
+                        .filter(item -> item.getStatus().startsWith("Terlambat"))
+                        .sorted((item1, item2) -> {
+                            // Sort by days late (highest first)
+                            try {
+                                int days1 = extractDaysLate(item1.getStatus());
+                                int days2 = extractDaysLate(item2.getStatus());
+                                return Integer.compare(days2, days1); // Reverse order - most late first
+                            } catch (Exception e) {
+                                return 0;
+                            }
+                        })
+                        .toList();
+            } else { // "Mendatang"
+                filtered = todos.stream()
+                        .filter(item -> item.getStatus().startsWith("Tersisa") || item.getStatus().equals("Hari Ini"))
+                        .sorted((item1, item2) -> {
+                            // Extract the days left as integers for comparison
+                            try {
+                                int days1 = item1.getStatus().equals("Hari Ini") ? 0 : extractDaysLeft(item1.getStatus());
+                                int days2 = item2.getStatus().equals("Hari Ini") ? 0 : extractDaysLeft(item2.getStatus());
+                                // Sort ascending by days left (closest first)
+                                return Integer.compare(days1, days2);
+                            } catch (Exception e) {
+                                return 0; // Keep the original order if parsing fails
+                            }
+                        })
+                        .toList();
+            }
+
+            todoList.setAll(filtered);
+            todoListView.setPrefHeight(Math.max(filtered.size() * 120, 350));
         } else {
+            // Original category filter logic
             List<ToDoItem> filtered = DataStore.getTodos(currentUser).stream()
                     .filter(i -> i.getKategori().equals(filter))
                     .toList();
             todoList.setAll(filtered);
-            todoListView.setPrefHeight(filtered.size() * 120);
+            todoListView.setPrefHeight(Math.max(filtered.size() * 120, 350));
         }
+    }
+
+    // Helper method to extract days left from status string
+    private int extractDaysLeft(String status) {
+        try {
+            // Format is "Tersisa X hari"
+            String[] parts = status.split(" ");
+            if (parts.length >= 2) {
+                return Integer.parseInt(parts[1]);
+            }
+        } catch (Exception e) {
+            // Do nothing, will return default
+        }
+        return Integer.MAX_VALUE; // Default to highest value if parsing fails
+    }
+
+    // Helper method to extract days late from status string
+    private int extractDaysLate(String status) {
+        try {
+            // Format is "Terlambat X hari"
+            String[] parts = status.split(" ");
+            if (parts.length >= 2) {
+                return Integer.parseInt(parts[1]);
+            }
+        } catch (Exception e) {
+            // Do nothing, will return default
+        }
+        return 0; // Default to 0 if parsing fails
     }
 
     @FXML
@@ -212,3 +294,4 @@ public class ToDoListController {
         filterCombo.setOnAction(e -> filterTodos());
     }
 }
+
