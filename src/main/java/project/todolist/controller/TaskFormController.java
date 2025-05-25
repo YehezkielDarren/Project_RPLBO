@@ -82,9 +82,21 @@ public class TaskFormController {
     @FXML
     private void handleAddCategory() {
         String newCategory = kategoriBaruField.getText().trim();
-        if (!newCategory.isEmpty() && !kategoriCombo.getItems().contains(newCategory)) {
+        if (newCategory.isEmpty()) {
+            Alert alert = new Alert(Alert.AlertType.WARNING, "Kategori belum diisi!");
+            alert.showAndWait();
+            return;
+        } else if (kategoriCombo.getItems().contains(newCategory)) {
+            Alert alert = new Alert(Alert.AlertType.WARNING, "Kategori sudah ada!");
+            alert.showAndWait();
+            return;
+        } else {
             kategoriCombo.getItems().add(newCategory);
             kategoriCombo.setValue(newCategory);
+            kategoriBaruField.setText("");
+            Alert alert = new Alert(Alert.AlertType.INFORMATION, "Kategori berhasil ditambah!");
+            alert.showAndWait();
+            return;
         }
     }
 

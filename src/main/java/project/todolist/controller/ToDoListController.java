@@ -9,6 +9,8 @@ import javafx.stage.Stage;
 import project.todolist.data.DataStore;
 import project.todolist.model.ToDoItem;
 
+import java.io.IOException;
+
 public class ToDoListController {
     @FXML private TableView<ToDoItem> todoTable;
     @FXML private TableColumn<ToDoItem, String> tanggalCol, waktuCol, catatanCol, kategoriCol;
@@ -99,9 +101,22 @@ public class ToDoListController {
     @FXML
     private void logout() {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/project/todolist/login-view.fxml"));
-            Stage stage = (Stage) todoTable.getScene().getWindow();
-            stage.setScene(new Scene(loader.load()));
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle("Logout");
+            alert.setHeaderText("Do You Want To Logout?");
+            alert.setContentText("Click OK to Exit");
+            alert.getButtonTypes().setAll(ButtonType.OK, ButtonType.CANCEL);
+            alert.showAndWait().ifPresent(response -> {
+                if (response == ButtonType.OK) {
+                    FXMLLoader loader = new FXMLLoader(getClass().getResource("/project/todolist/login-view.fxml"));
+                    Stage stage = (Stage) todoTable.getScene().getWindow();
+                    try {
+                        stage.setScene(new Scene(loader.load()));
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+            });
         } catch (Exception e) {
             e.printStackTrace();
         }
