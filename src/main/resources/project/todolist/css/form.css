@@ -1,0 +1,63 @@
+.task-form-root {
+    -fx-background-color: #f9f9f9;
+    -fx-padding: 25;
+}
+
+.form-title {
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #2c3e50;
+}
+
+.form-label {
+    -fx-font-weight: 600;
+}
+
+.form-textarea,
+.form-datepicker,
+.form-spinner,
+.form-combobox,
+.form-textfield {
+    -fx-background-radius: 5;
+    -fx-border-radius: 5;
+    -fx-border-color: #bdc3c7;
+    -fx-focus-color: #2980b9; /* warna saat fokus */
+    -fx-faint-focus-color: transparent;
+}
+
+.time-separator {
+    -fx-font-weight: bold;
+}
+
+.btn-primary {
+    -fx-background-color: linear-gradient(to bottom, #2196F3, #1976D2);
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-background-radius: 12px;
+    -fx-padding: 4px 16px;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 4px, 0.0, 0, 2px);
+    -fx-font-size: 13px;
+    -fx-transition: background-color 0.3s ease;
+}
+
+.btn-primary:hover {
+    -fx-background-color: linear-gradient(to bottom, #1976D2, #1565C0);
+}
+
+.btn-success {
+    -fx-background-color: linear-gradient(to bottom, #27ae60, #1e8449);
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-background-radius: 12px;
+    -fx-padding: 8px 16px;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 4px, 0.0, 0, 2px);
+    -fx-font-size: 13px;
+    -fx-transition: background-color 0.3s ease;
+}
+
+.btn-success:hover {
+    -fx-background-color: linear-gradient(to bottom, #1e8449, #166533);
+}
+
