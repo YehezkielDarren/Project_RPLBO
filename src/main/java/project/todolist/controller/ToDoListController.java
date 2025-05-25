@@ -1,21 +1,25 @@
 package project.todolist.controller;
 
 import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import project.todolist.data.DataStore;
 import project.todolist.model.ToDoItem;
 
 import java.io.IOException;
+import java.util.List;
 
 public class ToDoListController {
-    @FXML private TableView<ToDoItem> todoTable;
-    @FXML private TableColumn<ToDoItem, String> tanggalCol, waktuCol, catatanCol, statusCol, kategoriCol;
+    @FXML private ListView<ToDoItem> todoListView;
     @FXML private ComboBox<String> filterCombo;
     private String currentUser;
+    private ObservableList<ToDoItem> todoList = FXCollections.observableArrayList();
 
     public void setCurrentUser(String username) {
         this.currentUser = username;
@@ -24,19 +28,76 @@ public class ToDoListController {
     }
 
     private void loadTodos() {
-        var todos = DataStore.getTodos(currentUser);
+        List<ToDoItem> todos = DataStore.getTodos(currentUser);
+        todos.removeIf(todo -> todo == null);
         todos.forEach(ToDoItem::updateStatus);
-        todoTable.setItems(FXCollections.observableArrayList(todos));
-//        todoTable.setItems(FXCollections.observableArrayList(DataStore.getTodos(currentUser)));
+
+        todoList.setAll(todos);
+        todoListView.setItems(todoList);
+
+        int minHeight = 350;
+        int itemHeight = 150;
+
+        int calculatedHeight = todoList.size() * itemHeight;
+        todoListView.setPrefHeight(Math.max(calculatedHeight, minHeight));
+
+        todoListView.setCellFactory(lv -> new ListCell<>() {
+            @Override
+            protected void updateItem(ToDoItem item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty || item == null) {
+                    setText(null);
+                    setGraphic(null);
+                    setPrefHeight(0);
+                } else {
+                    VBox card = new VBox(4);
+                    card.setStyle("""
+                -fx-border-color: #1976D2;
+                -fx-border-radius: 8;
+                -fx-background-radius: 8;
+                -fx-background-color: #E3F2FD;
+                -fx-padding: 10;
+            """);
+
+                    Label tanggal = new Label("Tanggal: " + item.getTanggal());
+                    Label waktu = new Label("Waktu: " + item.getWaktu());
+                    Label catatan = new Label("Catatan: " + item.getCatatan());
+                    Label status = new Label("Status: " + item.getStatus());
+                    Label kategori = new Label("Kategori: " + item.getKategori());
+
+                    for (Label label : new Label[]{tanggal, waktu, catatan, status, kategori}) {
+                        label.setWrapText(true);
+                    }
+
+                    tanggal.setStyle("-fx-font-weight: bold;");
+
+                    switch (item.getStatus().toLowerCase()) {
+                        case "pending" -> status.setStyle("-fx-text-fill: orange;");
+                        case "done" -> status.setStyle("-fx-text-fill: green;");
+                        default -> status.setStyle("-fx-text-fill: red;");
+                    }
+
+                    card.getChildren().addAll(tanggal, waktu, catatan, status, kategori);
+                    VBox wrapper = new VBox(card);
+                    VBox.setMargin(card, new Insets(0, 0, 0, 0));
+
+                    setGraphic(wrapper);
+                    setPrefHeight(Control.USE_COMPUTED_SIZE);
+                }
+            }
+        });
     }
 
     private void loadCategories() {
         filterCombo.getItems().clear();
-        filterCombo.getItems().add("All");
-        DataStore.getTodos(currentUser).stream().map(ToDoItem::getKategori).distinct().forEach(filterCombo.getItems()::add);
+        filterCombo.getItems().add("Select Kategori");
+        DataStore.getTodos(currentUser).stream()
+                .map(ToDoItem::getKategori)
+                .distinct()
+                .forEach(filterCombo.getItems()::add);
+        filterCombo.getSelectionModel().selectFirst();
     }
 
-    // ✅ Tambahkan method refreshData
     public void refreshData() {
         loadTodos();
         loadCategories();
@@ -54,14 +115,14 @@ public class ToDoListController {
             controller.initData(currentUser, null, this::refreshData);
 
             stage.show();
-        } catch (Exception e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
     @FXML
     private void deleteTodo() {
-        ToDoItem selected = todoTable.getSelectionModel().getSelectedItem();
+        ToDoItem selected = todoListView.getSelectionModel().getSelectedItem();
         if (selected != null) {
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
             alert.setTitle("Confirmation");
@@ -71,8 +132,7 @@ public class ToDoListController {
             alert.showAndWait().ifPresent(response -> {
                 if (response == ButtonType.OK) {
                     DataStore.removeTodo(currentUser, selected);
-                    loadTodos();
-                    loadCategories();
+                    refreshData();
                 }
             });
         }
@@ -80,7 +140,7 @@ public class ToDoListController {
 
     @FXML
     private void editTodo() {
-        ToDoItem selected = todoTable.getSelectionModel().getSelectedItem();
+        ToDoItem selected = todoListView.getSelectionModel().getSelectedItem();
         if (selected != null) {
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
             alert.setTitle("Confirmation");
@@ -99,7 +159,7 @@ public class ToDoListController {
                         controller.initData(currentUser, selected, this::refreshData);
 
                         stage.show();
-                    } catch (Exception e) {
+                    } catch (IOException e) {
                         e.printStackTrace();
                     }
                 }
@@ -110,12 +170,14 @@ public class ToDoListController {
     @FXML
     private void filterTodos() {
         String filter = filterCombo.getValue();
-        if (filter == null || filter.equals("All")) {
+        if (filter == null || filter.equals("Select Kategori")) {
             loadTodos();
         } else {
-            todoTable.setItems(FXCollections.observableArrayList(
-                    DataStore.getTodos(currentUser).stream().filter(i -> i.getKategori().equals(filter)).toList()
-            ));
+            List<ToDoItem> filtered = DataStore.getTodos(currentUser).stream()
+                    .filter(i -> i.getKategori().equals(filter))
+                    .toList();
+            todoList.setAll(filtered);
+            todoListView.setPrefHeight(filtered.size() * 120);
         }
     }
 
@@ -129,10 +191,12 @@ public class ToDoListController {
             alert.getButtonTypes().setAll(ButtonType.OK, ButtonType.CANCEL);
             alert.showAndWait().ifPresent(response -> {
                 if (response == ButtonType.OK) {
-                    FXMLLoader loader = new FXMLLoader(getClass().getResource("/project/todolist/login-view.fxml"));
-                    Stage stage = (Stage) todoTable.getScene().getWindow();
                     try {
-                        stage.setScene(new Scene(loader.load()));
+                        FXMLLoader loader = new FXMLLoader(getClass().getResource("/project/todolist/login-view.fxml"));
+                        Stage stage = (Stage) todoListView.getScene().getWindow();
+                        Scene scene = new Scene(loader.load());
+                        scene.getStylesheets().add(getClass().getResource("/project/todolist/css/login.css").toExternalForm());
+                        stage.setScene(scene);
                     } catch (IOException e) {
                         throw new RuntimeException(e);
                     }
@@ -145,10 +209,6 @@ public class ToDoListController {
 
     @FXML
     private void initialize() {
-        tanggalCol.setCellValueFactory(data -> data.getValue().tanggalProperty());
-        waktuCol.setCellValueFactory(data -> data.getValue().waktuProperty());
-        catatanCol.setCellValueFactory(data -> data.getValue().catatanProperty());
-        statusCol.setCellValueFactory(data -> data.getValue().statusProperty());
-        kategoriCol.setCellValueFactory(data -> data.getValue().kategoriProperty());
+        filterCombo.setOnAction(e -> filterTodos());
     }
 }
