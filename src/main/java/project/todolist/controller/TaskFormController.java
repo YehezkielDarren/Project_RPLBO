@@ -23,9 +23,7 @@ public class TaskFormController {
 
     @FXML
     private void initialize() {
-        // Hour spinner with two-digit format and wrap-around
-        SpinnerValueFactory.IntegerSpinnerValueFactory hourFactory =
-                new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 23, 0);
+        SpinnerValueFactory.IntegerSpinnerValueFactory hourFactory = new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 23, 0);
         hourFactory.setWrapAround(true);
         hourFactory.setConverter(new StringConverter<Integer>() {
             @Override public String toString(Integer value) {
@@ -39,9 +37,7 @@ public class TaskFormController {
         hourSpinner.setValueFactory(hourFactory);
         hourSpinner.getEditor().setText(hourFactory.getConverter().toString(hourFactory.getValue()));
 
-        // Minute spinner with two-digit format and wrap-around
-        SpinnerValueFactory.IntegerSpinnerValueFactory minuteFactory =
-                new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 59, 0);
+        SpinnerValueFactory.IntegerSpinnerValueFactory minuteFactory = new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 59, 0);
         minuteFactory.setWrapAround(true);
         minuteFactory.setConverter(new StringConverter<Integer>() {
             @Override public String toString(Integer value) {
@@ -61,7 +57,6 @@ public class TaskFormController {
         this.editingItem = item;
         this.onSaveCallback = onSave;
 
-        // Load categories into combo box
         kategoriCombo.getItems().addAll(
                 DataStore.getTodos(user).stream()
                         .map(ToDoItem::getKategori)
