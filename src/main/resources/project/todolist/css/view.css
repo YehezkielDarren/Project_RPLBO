@@ -10,9 +10,8 @@
     -fx-background-radius: 12px;
     -fx-padding: 8px 16px;
     -fx-cursor: hand;
-    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 4px, 0.0, 0, 2px);
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 4, 0, 0, 2);
     -fx-font-size: 13px;
-    -fx-transition: 0.3s;
 }
 
 .button:hover {
@@ -26,12 +25,23 @@
     -fx-background-radius: 10px;
     -fx-padding: 8px 16px;
     -fx-cursor: hand;
-    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 4px, 0.0, 0, 2px);
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 4, 0.0, 0, 2);
     -fx-font-size: 13px;
 }
 
 .button-alt:hover {
     -fx-background-color: linear-gradient(to bottom, #1e88e5, #1565c0);
+}
+
+#logoutButton {
+    -fx-background-color: linear-gradient(to bottom, #EF5350, #E53935);
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-background-radius: 10px;
+}
+
+#logoutButton:hover {
+    -fx-background-color: linear-gradient(to bottom, #E53935, #C62828);
 }
 
 .combo-box {
@@ -43,14 +53,27 @@
     -fx-font-size: 13px;
 }
 
-.table-view {
-    -fx-background-color: white;
-    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.03), 5px, 0.0, 0, 1px);
-}
-
 .label {
     -fx-font-size: 14px;
     -fx-text-fill: black;
+}
+
+.label.bold {
+    -fx-font-weight: bold;
+    -fx-font-size: 14px;
+}
+
+.label.status-pending {
+    -fx-text-fill: orange;
+}
+
+.label.status-done {
+    -fx-text-fill: green;
+}
+
+.label.category {
+    -fx-text-fill: #1E88E5;
+    -fx-font-style: italic;
 }
 
 .app-title {
@@ -58,7 +81,43 @@
     -fx-font-weight: bold;
     -fx-text-fill: black;
     -fx-padding: 0 20 0 20;
-    -fx-effect: dropshadow( gaussian , rgba(0,0,0,0.25) , 2,0.0,0,1 );
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.25), 2, 0.0, 0, 1);
     -fx-font-family: "Segoe UI", sans-serif;
 }
 
+.list-view {
+    -fx-background-color: #f4f6f8;
+    -fx-padding: 10;
+    -fx-border-radius: 12px;
+    -fx-background-radius: 12px;
+}
+
+.list-cell {
+    -fx-background-color: #E3F2FD;
+    -fx-border-color: #1976D2;
+    -fx-border-width: 2px;
+    -fx-border-radius: 10px;
+    -fx-background-radius: 10px;
+    -fx-padding: 14px;
+    -fx-font-size: 14px;
+    -fx-font-family: "Segoe UI", sans-serif;
+    -fx-text-fill: #212121;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.05), 4, 0.0, 0, 2);
+}
+
+.list-cell:filled:selected,
+.list-cell:filled:selected:hover {
+    -fx-background-color: #BBDEFB;
+    -fx-border-color: #0D47A1;
+    -fx-text-fill: #0D47A1;
+}
+
+.list-cell:hover {
+    -fx-background-color: #BBDEFB;
+    -fx-border-color: #2196F3;
+}
+
+.table-view {
+    -fx-background-color: white;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.03), 5, 0.0, 0, 1);
+}
