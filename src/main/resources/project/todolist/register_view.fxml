@@ -8,22 +8,30 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox alignment="CENTER" prefHeight="175.0" prefWidth="240.0" spacing="10" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="project.todolist.controller.RegisterController">
-    <Label text="Register" />
-    <TextField fx:id="usernameField" promptText="Username">
-      <VBox.margin>
-         <Insets left="30.0" right="30.0" />
-      </VBox.margin></TextField>
-    <PasswordField fx:id="passwordField" promptText="Password">
-      <VBox.margin>
-         <Insets left="30.0" right="30.0" />
-      </VBox.margin></PasswordField>
+<VBox alignment="CENTER" prefHeight="175.0" prefWidth="240.0" spacing="10"
+      xmlns="http://javafx.com/javafx/23.0.1"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="project.todolist.controller.RegisterController"
+      styleClass="login-root" stylesheets="css/register.css">
+    <Label text="Register" styleClass="form-title" />
+    <TextField fx:id="usernameField" promptText="Username" styleClass="form-textfield">
+        <VBox.margin>
+            <Insets left="30.0" right="30.0" />
+        </VBox.margin>
+    </TextField>
+    <PasswordField fx:id="passwordField" promptText="Password" styleClass="form-textfield">
+        <VBox.margin>
+            <Insets left="30.0" right="30.0" />
+        </VBox.margin>
+    </PasswordField>
     <Label fx:id="messageLabel" textFill="green" />
-    <HBox spacing="10">
-        <Button onAction="#handleRegister" text="Register" />
-        <Button onAction="#switchToLogin" text="Back to Login" />
-      <VBox.margin>
-         <Insets bottom="5.0" left="45.0" />
-      </VBox.margin>
+    <HBox spacing="20" alignment="CENTER">
+        <Button onAction="#handleRegister" text="Register" styleClass="button" />
+        <Button onAction="#switchToLogin" text="Kembali" styleClass="button-alt" />
+        <VBox.margin>
+            <Insets top="20.0" />
+        </VBox.margin>
     </HBox>
 </VBox>
+
+
