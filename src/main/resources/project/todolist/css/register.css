@@ -1,0 +1,66 @@
+.login-root {
+    -fx-background-color: linear-gradient(to bottom right, #2196F3, #64B5F6);
+    -fx-padding: 40 30 40 30;
+    -fx-alignment: center;
+}
+
+.login-root > Label {
+    -fx-font-size: 28px;
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+    -fx-padding: 0 0 20 0;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.25), 2, 0.0, 0, 1);
+}
+
+.login-root TextField,
+.login-root PasswordField {
+    -fx-background-radius: 8;
+    -fx-border-radius: 8;
+    -fx-border-color: rgba(255,255,255,0.7);
+    -fx-background-color: rgba(255,255,255,0.9);
+    -fx-padding: 8 10 8 10;
+    -fx-font-size: 14px;
+    -fx-text-fill: #333;
+    -fx-prompt-text-fill: derive(-fx-control-inner-background, -30%);
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 2, 0.0, 0, 1);
+}
+
+.login-root TextField:focused,
+.login-root PasswordField:focused {
+    -fx-border-color: #1565C0;
+    -fx-background-color: white;
+}
+
+.login-root Label#messageLabel {
+    -fx-text-fill: #FFB74D; /* Oranye lembut */
+    -fx-font-size: 12px;
+    -fx-font-weight: normal;
+    -fx-padding: 5 0 5 0;
+}
+
+.login-root HBox {
+    -fx-alignment: center;
+    -fx-spacing: 12;
+    -fx-padding: 10 0 0 0;
+}
+
+.login-root Button {
+    -fx-background-color: linear-gradient(to bottom, #1976D2, #1565C0);
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-background-radius: 12px;
+    -fx-padding: 8 16 8 16;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.15), 4, 0.0, 0, 2);
+    -fx-font-size: 14px;
+    -fx-transition: background-color 0.3s ease;
+    -fx-min-width: 120px;
+}
+
+.login-root Button:hover {
+    -fx-background-color: linear-gradient(to bottom, #1565C0, #0D47A1);
+}
+
+.login-root HBox > Button:first-child {
+    -fx-margin-right: 10px;
+}

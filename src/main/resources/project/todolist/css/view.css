@@ -1,0 +1,64 @@
+.root {
+    -fx-font-family: "Segoe UI", sans-serif;
+    -fx-background-color: #f4f6f8;
+}
+
+.button {
+    -fx-background-color: linear-gradient(to bottom, #2196F3, #1976D2);
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-background-radius: 12px;
+    -fx-padding: 8px 16px;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 4px, 0.0, 0, 2px);
+    -fx-font-size: 13px;
+    -fx-transition: 0.3s;
+}
+
+.button:hover {
+    -fx-background-color: linear-gradient(to bottom, #1976D2, #1565C0);
+}
+
+.button-alt {
+    -fx-background-color: linear-gradient(to bottom, #2196F3, #1976D2);
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-background-radius: 10px;
+    -fx-padding: 8px 16px;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 4px, 0.0, 0, 2px);
+    -fx-font-size: 13px;
+}
+
+.button-alt:hover {
+    -fx-background-color: linear-gradient(to bottom, #1e88e5, #1565c0);
+}
+
+.combo-box {
+    -fx-background-radius: 10px;
+    -fx-padding: 5px 10px;
+    -fx-background-color: white;
+    -fx-border-color: #ccc;
+    -fx-border-radius: 10px;
+    -fx-font-size: 13px;
+}
+
+.table-view {
+    -fx-background-color: white;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.03), 5px, 0.0, 0, 1px);
+}
+
+.label {
+    -fx-font-size: 14px;
+    -fx-text-fill: black;
+}
+
+.app-title {
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+    -fx-text-fill: black;
+    -fx-padding: 0 20 0 20;
+    -fx-effect: dropshadow( gaussian , rgba(0,0,0,0.25) , 2,0.0,0,1 );
+    -fx-font-family: "Segoe UI", sans-serif;
+}
+

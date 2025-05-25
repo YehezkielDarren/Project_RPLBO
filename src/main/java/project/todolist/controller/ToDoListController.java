@@ -124,8 +124,8 @@ public class ToDoListController {
         try {
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
             alert.setTitle("Logout");
-            alert.setHeaderText("Do You Want To Logout?");
-            alert.setContentText("Click OK to Exit");
+            alert.setHeaderText("Apakah Kamu Mau Logout?");
+            alert.setContentText("Klik OK untuk Exit");
             alert.getButtonTypes().setAll(ButtonType.OK, ButtonType.CANCEL);
             alert.showAndWait().ifPresent(response -> {
                 if (response == ButtonType.OK) {

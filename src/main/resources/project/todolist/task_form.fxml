@@ -1,46 +1,42 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Spinner?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
 
-<VBox spacing="15" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml"
-      fx:controller="project.todolist.controller.TaskFormController">
-    <padding>
-        <Insets top="20" right="20" bottom="20" left="20"/>
-    </padding>
-
-    <Label text="Form Tugas" style="-fx-font-size: 20px; -fx-font-weight: bold;"/>
-
-    <!-- Catatan / Deskripsi -->
-    <HBox spacing="10">
-        <Label text="Catatan:" minWidth="100"/>
-        <TextArea fx:id="catatanArea" prefRowCount="3" prefColumnCount="20" promptText="Deskripsi tugas"/>
+<VBox spacing="20" styleClass="task-form-root" stylesheets="@css/form.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="project.todolist.controller.TaskFormController">
+    <HBox alignment="CENTER_LEFT" spacing="15">
+        <Label minWidth="110" styleClass="form-label" text="Catatan:" />
+        <TextArea fx:id="catatanArea" prefColumnCount="25" prefRowCount="4" promptText="Deskripsi tugas" styleClass="form-textarea" />
     </HBox>
-
-    <!-- Tanggal -->
-    <HBox spacing="10">
-        <Label text="Tanggal:" minWidth="100"/>
-        <DatePicker fx:id="datePicker"/>
+    <HBox alignment="CENTER_LEFT" spacing="15">
+        <Label minWidth="110" styleClass="form-label" text="Tanggal:" />
+        <DatePicker fx:id="datePicker" styleClass="form-datepicker" />
     </HBox>
-
-    <!-- Waktu -->
-    <HBox spacing="10">
-        <Label text="Waktu:" minWidth="100"/>
-        <Spinner fx:id="hourSpinner" prefWidth="70" editable="true"/>
-        <Label text=":"/>
-        <Spinner fx:id="minuteSpinner" prefWidth="70" editable="true"/>
+    <HBox alignment="CENTER_LEFT" spacing="5">
+        <Label minWidth="110" styleClass="form-label" text="Waktu:" />
+        <Spinner fx:id="hourSpinner" editable="true" prefWidth="70" styleClass="form-spinner">
+         <HBox.margin>
+            <Insets left="10.0" />
+         </HBox.margin></Spinner>
+        <Label styleClass="time-separator" text=":" />
+        <Spinner fx:id="minuteSpinner" editable="true" prefWidth="70" styleClass="form-spinner" />
     </HBox>
-
-    <!-- Kategori -->
-    <HBox spacing="10" alignment="CENTER_LEFT">
-        <Label text="Kategori:" minWidth="100"/>
-        <ComboBox fx:id="kategoriCombo" promptText="Pilih kategori" prefWidth="150"/>
-        <TextField fx:id="kategoriBaruField" promptText="Kategori baru" prefWidth="120"/>
-        <Button text="Tambah Kategori" onAction="#handleAddCategory"/>
+    <HBox alignment="CENTER_LEFT" spacing="10">
+        <Label minWidth="110" styleClass="form-label" text="Kategori:" />
+        <ComboBox fx:id="kategoriCombo" prefWidth="160" promptText="Pilih kategori" styleClass="form-combobox">
+         <HBox.margin>
+            <Insets left="5.0" />
+         </HBox.margin></ComboBox>
+        <TextField fx:id="kategoriBaruField" prefWidth="140" promptText="Kategori baru" styleClass="form-textfield" />
+        <Button onAction="#handleAddCategory" styleClass="btn-primary" text="Tambah Kategori" />
     </HBox>
-
-    <!-- Simpan -->
-    <Button text="Simpan" onAction="#handleSaveTask" maxWidth="Infinity" style="-fx-font-size: 14px;"/>
-
+    <Button maxWidth="Infinity" onAction="#handleSaveTask" styleClass="btn-success" text="Simpan" />
 </VBox>
