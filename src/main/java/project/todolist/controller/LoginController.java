@@ -45,7 +45,9 @@ public class LoginController {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/project/todolist/register_view.fxml"));
             Stage stage = (Stage) usernameField.getScene().getWindow();
-            stage.setScene(new Scene(loader.load()));
+            Scene scene = new Scene(loader.load());
+            scene.getStylesheets().add(getClass().getResource("/project/todolist/css/register.css").toExternalForm());
+            stage.setScene(scene);
         } catch (Exception e) { e.printStackTrace(); }
     }
 }
