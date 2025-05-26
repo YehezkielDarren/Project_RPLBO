@@ -40,6 +40,8 @@
                 </TextField>
                 <Label text="Filter by Category:" />
                 <ComboBox fx:id="filterCombo" onAction="#filterTodos" promptText="Select Category" styleClass="combo-box" />
+                <Label text="Urutkan:" />
+                <ComboBox fx:id="sortCombo" onAction="#sortTodos" promptText="Sort by" prefWidth="120" styleClass="combo-box" />
                 <Button fx:id="logoutButton" onAction="#logout" styleClass="button-alt" text="⎋ Logout" />
             </HBox>
         </HBox>
