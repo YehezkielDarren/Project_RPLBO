@@ -13,6 +13,8 @@ import project.todolist.data.DataStore;
 import project.todolist.model.ToDoItem;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 public class ToDoListController {
@@ -22,6 +24,8 @@ public class ToDoListController {
     @FXML
     private ComboBox<String> filterCombo;
     @FXML
+    private ComboBox<String> sortCombo;
+    @FXML
     private TextField searchField;
     private String currentUser;
     private ObservableList<ToDoItem> todoList = FXCollections.observableArrayList();
@@ -30,10 +34,13 @@ public class ToDoListController {
     @FXML
     private void initialize() {
         filterCombo.setOnAction(e -> filterTodos());
-
+        sortCombo.setOnAction(e -> sortTodos());
         searchField.textProperty().addListener((observable, oldValue, newValue) -> {
             performSearch(newValue);
         });
+        sortCombo.getItems().addAll("Judul A-Z", "Judul Z-A", "Tenggat Terdekat", "Tenggat Terjauh");
+        sortCombo.getSelectionModel().selectFirst(); // optional
+
     }
 
     public void setCurrentUser(String username) {
@@ -119,6 +126,26 @@ public class ToDoListController {
 
         filterCombo.getSelectionModel().selectFirst();
     }
+
+    @FXML
+    private void sortTodos() {
+        String sortOption = sortCombo.getValue();
+        if (sortOption == null) return;
+
+        List<ToDoItem> sortedList = new ArrayList<>(todoList);
+
+        switch (sortOption) {
+            case "Judul A-Z" -> sortedList.sort(Comparator.comparing(ToDoItem::getTitle, String.CASE_INSENSITIVE_ORDER));
+            case "Judul Z-A" -> sortedList.sort(Comparator.comparing(ToDoItem::getTitle, String.CASE_INSENSITIVE_ORDER).reversed());
+            case "Tenggat Terdekat" -> sortedList.sort(Comparator.comparing(ToDoItem::getTanggal)); // assuming getTanggal returns LocalDate
+            case "Tenggat Terjauh" -> sortedList.sort(Comparator.comparing(ToDoItem::getTanggal).reversed());
+            default -> {}
+        }
+
+        todoList.setAll(sortedList);
+        todoListView.setItems(todoList);
+    }
+
 
     public void refreshData() {
         loadTodos();

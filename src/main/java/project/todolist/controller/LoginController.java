@@ -25,7 +25,7 @@ public class LoginController {
                 alert = new Alert(Alert.AlertType.INFORMATION);
                 alert.setTitle("Information");
                 alert.setHeaderText("Login Berhasil!");
-                alert.setContentText("Welcome " + user.getUsername() + "!");
+                alert.setContentText("Selamat Datang " + user.getUsername() + "!");
                 alert.showAndWait();
 
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("/project/todolist/todo_list_view.fxml"));
@@ -36,7 +36,11 @@ public class LoginController {
                 stage.setScene(scene);
             } catch (Exception e) { e.printStackTrace(); }
         } else {
-            messageLabel.setText("Invalid credentials.");
+            alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setHeaderText("Login Gagal!");
+            alert.setContentText("Username atau Password salah! Silahkan coba lagi!");
+            alert.showAndWait();
         }
     }
 

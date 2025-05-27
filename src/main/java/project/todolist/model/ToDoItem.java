@@ -37,15 +37,15 @@ public class ToDoItem {
 
             if (dueDateTime.isBefore(now)) {
                 long daysLate = java.time.temporal.ChronoUnit.DAYS.between(dueDate, now.toLocalDate());
-                setStatus("Terlambat " + daysLate + " hari");
+                setStatus("Terlambat " + daysLate + " hari.");
             } else if (dueDate.isEqual(now.toLocalDate())) {
-                setStatus("Hari Ini");
+                setStatus("Hari Ini.");
             } else {
                 long daysLeft = java.time.temporal.ChronoUnit.DAYS.between(now.toLocalDate(), dueDate);
-                setStatus("Tersisa " + daysLeft + " hari");
+                setStatus("Tersisa " + daysLeft + " hari.");
             }
         } catch (Exception e) {
-            setStatus("Tanggal tidak valid");
+            setStatus("Tanggal tidak valid! Silahkan pilih ulang!");
         }
     }
 
