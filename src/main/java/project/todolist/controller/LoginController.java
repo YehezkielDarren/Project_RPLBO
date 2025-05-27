@@ -34,6 +34,8 @@ public class LoginController {
                 ToDoListController controller = loader.getController();
                 controller.setCurrentUser(user.getUsername());
                 stage.setScene(scene);
+                stage.centerOnScreen();
+                stage.setMaximized(true);
             } catch (Exception e) { e.printStackTrace(); }
         } else {
             alert = new Alert(Alert.AlertType.ERROR);

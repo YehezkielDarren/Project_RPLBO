@@ -27,6 +27,8 @@ public class ToDoListController {
     private ComboBox<String> sortCombo;
     @FXML
     private TextField searchField;
+    @FXML
+    private Label appTitleLabel;
     private String currentUser;
     private ObservableList<ToDoItem> todoList = FXCollections.observableArrayList();
     private ObservableList<ToDoItem> originalTodoList = FXCollections.observableArrayList();
@@ -39,14 +41,31 @@ public class ToDoListController {
             performSearch(newValue);
         });
         sortCombo.getItems().addAll("Judul A-Z", "Judul Z-A", "Tenggat Terdekat", "Tenggat Terjauh");
-        sortCombo.getSelectionModel().selectFirst(); // optional
+        sortCombo.getSelectionModel().selectFirst();
 
     }
 
     public void setCurrentUser(String username) {
         this.currentUser = username;
+        setSalam(username);
         loadTodos();
         loadCategories();
+    }
+
+    private void setSalam(String username) {
+        if (appTitleLabel == null) return;
+        String greeting;
+        int hour = java.time.LocalTime.now().getHour();
+        if (hour >= 5 && hour < 11) {
+            greeting = "Selamat pagi";
+        } else if (hour >= 11 && hour < 15) {
+            greeting = "Selamat siang";
+        } else if (hour >= 15 && hour < 18) {
+            greeting = "Selamat sore";
+        } else {
+            greeting = "Selamat malam";
+        }
+        appTitleLabel.setText(greeting + ", " + username);
     }
 
     private void loadTodos() {
@@ -337,6 +356,7 @@ public class ToDoListController {
                         Scene scene = new Scene(loader.load());
                         scene.getStylesheets().add(getClass().getResource("/project/todolist/css/login.css").toExternalForm());
                         stage.setScene(scene);
+                        stage.centerOnScreen();
                     } catch (IOException e) {
                         throw new RuntimeException(e);
                     }
@@ -348,3 +368,4 @@ public class ToDoListController {
         }
     }
 }
+

@@ -18,6 +18,7 @@ public class ToDoList extends Application {
         }
         stage.setTitle("Aplikasi ToDoList");
         stage.setScene(scene);
+        stage.centerOnScreen();
         stage.show();
     }
 
@@ -25,3 +26,4 @@ public class ToDoList extends Application {
         launch(args);
     }
 }
+
