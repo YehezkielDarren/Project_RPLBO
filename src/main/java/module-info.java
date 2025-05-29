@@ -1,6 +1,7 @@
 module project.todolist {
     requires javafx.controls;
     requires javafx.fxml;
+    requires java.sql;
 
     exports project.todolist;
     opens project.todolist to javafx.fxml;
