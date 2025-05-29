@@ -11,13 +11,18 @@ import project.todolist.data.DataStore;
 import project.todolist.model.User;
 
 public class RegisterController {
+    private DataStore dataStore;
     @FXML private TextField usernameField;
     @FXML private PasswordField passwordField;
     @FXML private Label messageLabel;
 
+    public RegisterController(){
+        this.dataStore=new DataStore();
+    }
+
     @FXML
     private void handleRegister() {
-        boolean success = DataStore.addUser(new User(usernameField.getText(), passwordField.getText()));
+        boolean success = dataStore.registerUser(new User(usernameField.getText(), passwordField.getText()));
         if (success) {
             messageLabel.setText("Registration successful. Go login.");
         } else {

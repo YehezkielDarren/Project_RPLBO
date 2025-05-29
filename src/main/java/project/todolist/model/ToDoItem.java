@@ -8,6 +8,7 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 
 public class ToDoItem {
+    private int id;
     private StringProperty tanggal;
     private StringProperty waktu;
     private StringProperty title;
@@ -38,7 +39,7 @@ public class ToDoItem {
             if (dueDateTime.isBefore(now)) {
                 long daysLate = java.time.temporal.ChronoUnit.DAYS.between(dueDate, now.toLocalDate());
                 setStatus("Terlambat " + daysLate + " hari.");
-            } else if (dueDate.isEqual(now.toLocalDate())) {
+            } else if (dueDate.equals(now.toLocalDate())) {
                 setStatus("Hari Ini.");
             } else {
                 long daysLeft = java.time.temporal.ChronoUnit.DAYS.between(now.toLocalDate(), dueDate);
@@ -55,7 +56,9 @@ public class ToDoItem {
     public String getCatatan() { return catatan.get(); }
     public String getKategori() { return kategori.get(); }
     public String getStatus() { return status.get(); }
+    public int getId() { return id; }
 
+    public void setId(int id) { this.id = id; }
     public void setTanggal(String value) { tanggal.set(value); }
     public void setWaktu(String value) { waktu.set(value); }
     public void setTitle(String value) { title.set(value); }

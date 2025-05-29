@@ -10,6 +10,8 @@ import java.time.LocalDate;
 import javafx.util.StringConverter;
 
 public class TaskFormController {
+    private DataStore dataStore;
+
     @FXML private TextField titleField;
     @FXML private DatePicker datePicker;
     @FXML private Spinner<Integer> hourSpinner;
@@ -21,6 +23,10 @@ public class TaskFormController {
     private String currentUser;
     private ToDoItem editingItem;
     private Runnable onSaveCallback;
+
+    public TaskFormController(){
+        this.dataStore=new DataStore();
+    }
 
     @FXML
     private void initialize() {
@@ -59,7 +65,7 @@ public class TaskFormController {
         this.onSaveCallback = onSave;
 
         kategoriCombo.getItems().addAll(
-                DataStore.getTodos(user).stream()
+                dataStore.getTodosForUser(user).stream()
                         .map(ToDoItem::getKategori)
                         .distinct()
                         .toList()
@@ -115,11 +121,11 @@ public class TaskFormController {
         newItem.updateStatus();
 
         if (editingItem == null) {
-            DataStore.addTodo(currentUser, newItem);
+            dataStore.addTodoForUser(currentUser, newItem);
             Alert successAlert = new Alert(Alert.AlertType.INFORMATION, "Tugas berhasil ditambahkan!");
             successAlert.showAndWait();
         } else {
-            DataStore.editTodo(currentUser, editingItem, newItem);
+            dataStore.editTodoForUser(currentUser, newItem, editingItem.getId());
             Alert successAlert = new Alert(Alert.AlertType.INFORMATION, "Tugas berhasil diperbarui!");
             successAlert.showAndWait();
         }

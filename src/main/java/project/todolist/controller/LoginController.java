@@ -11,17 +11,23 @@ import javafx.stage.Stage;
 import project.todolist.data.DataStore;
 import project.todolist.model.User;
 
+import java.util.Optional;
+
 public class LoginController {
+
+    private DataStore dataStore;
+
     @FXML private TextField usernameField;
     @FXML private PasswordField passwordField;
     @FXML private Label messageLabel;
 
     @FXML
     private void handleLogin() {
-        User user = DataStore.findUser(usernameField.getText(), passwordField.getText());
+        Optional<User> userOptional = dataStore.loginUser(usernameField.getText(), passwordField.getText());
         Alert alert;
-        if (user != null) {
+        if (userOptional.isPresent()) {
             try {
+                User user = userOptional.get();
                 alert = new Alert(Alert.AlertType.INFORMATION);
                 alert.setTitle("Information");
                 alert.setHeaderText("Login Berhasil!");
@@ -53,5 +59,9 @@ public class LoginController {
             scene.getStylesheets().add(getClass().getResource("/project/todolist/css/register.css").toExternalForm());
             stage.setScene(scene);
         } catch (Exception e) { e.printStackTrace(); }
+    }
+
+    public LoginController(){
+        this.dataStore=new DataStore();
     }
 }
