@@ -18,6 +18,7 @@ import java.util.Comparator;
 import java.util.List;
 
 public class ToDoListController {
+    private DataStore dataStore;
     public Button logoutButton;
     @FXML
     private ListView<ToDoItem> todoListView;
@@ -32,6 +33,10 @@ public class ToDoListController {
     private String currentUser;
     private ObservableList<ToDoItem> todoList = FXCollections.observableArrayList();
     private ObservableList<ToDoItem> originalTodoList = FXCollections.observableArrayList();
+
+    public ToDoListController(){
+        this.dataStore=new DataStore();
+    }
 
     @FXML
     private void initialize() {
@@ -69,7 +74,7 @@ public class ToDoListController {
     }
 
     private void loadTodos() {
-        List<ToDoItem> todos = DataStore.getTodos(currentUser);
+        List<ToDoItem> todos = dataStore.getTodosForUser(currentUser);
         todos.removeIf(todo -> todo == null);
         todos.forEach(ToDoItem::updateStatus);
 
@@ -141,7 +146,7 @@ public class ToDoListController {
         filterCombo.getItems().add("Terlambat");
         filterCombo.getItems().add("Mendatang");
 
-        DataStore.getTodos(currentUser).stream().map(ToDoItem::getKategori).distinct().forEach(filterCombo.getItems()::add);
+        dataStore.getTodosForUser(currentUser).stream().map(ToDoItem::getKategori).distinct().forEach(filterCombo.getItems()::add);
 
         filterCombo.getSelectionModel().selectFirst();
     }
@@ -199,7 +204,7 @@ public class ToDoListController {
             alert.getButtonTypes().setAll(ButtonType.OK, ButtonType.CANCEL);
             alert.showAndWait().ifPresent(response -> {
                 if (response == ButtonType.OK) {
-                    DataStore.removeTodo(currentUser, selected);
+                    dataStore.removeTodoForUser(currentUser, selected.getId());
                     refreshData();
                 }
             });
@@ -242,7 +247,7 @@ public class ToDoListController {
         String searchText = searchField.getText();
         boolean hasSearchText = searchText != null && !searchText.trim().isEmpty();
 
-        List<ToDoItem> todos = DataStore.getTodos(currentUser);
+        List<ToDoItem> todos = dataStore.getTodosForUser(currentUser);
         todos.removeIf(todo -> todo == null);
         todos.forEach(ToDoItem::updateStatus);
 

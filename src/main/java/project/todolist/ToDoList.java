@@ -23,6 +23,7 @@ public class ToDoList extends Application {
     }
 
     public static void main(String[] args) {
+        project.todolist.data.DatabaseManager.initializeDatabase();
         launch(args);
     }
 }
